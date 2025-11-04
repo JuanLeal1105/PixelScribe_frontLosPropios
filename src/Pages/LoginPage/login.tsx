@@ -20,7 +20,7 @@ const Login: React.FC = () => {
          e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8083/api/auth/login", {
+            const response = await axios.post("http://localhost:8081/api/auth/login", {
                 username,
                 password,
               });
