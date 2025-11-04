@@ -1,23 +1,75 @@
 import React, { useState, useMemo } from 'react';
 import { Mail, Lock, User } from 'lucide-react';
 import "./login.css";
+import { useNavigate } from "react-router-dom";
+import Popup from "../../Components/Popup/popup"
+import axios from "axios";
 
 // Componente Principal de la Aplicación
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Aquí iría la lógica de autenticación
-        console.log('Intento de Login:', { username, password });
-        // Simulación de mensaje de éxito/error (en lugar de alert())
-        const loginMessage = document.getElementById('login-message');
-        if (loginMessage) {
-             loginMessage.textContent = 'Intento de login. Usuario: ' + username;
-             loginMessage.style.opacity = '1';
-             setTimeout(() => loginMessage.style.opacity = '0', 3000);
+    const [popup, setPopup] = useState<{ title: string; message: string } | null>(
+        null
+    );
+
+    const navigate = useNavigate();
+
+    const handleLogin = async (e: React.FormEvent) => {
+         e.preventDefault();
+
+        try {
+            const response = await axios.post("http://localhost:8083/auth/login", {
+                username,
+                password,
+              });
+            console.log("Response completo:", response.data);
+
+            // Validar estructura de respuesta
+            if (
+                !response.data.data ||
+                !response.data.data.token ||
+                !response.data.data.role
+            ) {
+                console.error("Estructura de respuesta inválida:", response.data);
+                setPopup({
+                    title: "Error de respuesta del servidor",
+                    message: "La respuesta del servidor no tiene el formato esperado.",
+                });
+                return;
+            }
+
+            sessionStorage.setItem("token", response.data.data.token);
+        } catch (error: any) {
+            if (axios.isAxiosError(error) && error.response) {
+                const status = error.response.status;
+                const message =
+                error.response.data?.message || "Ocurrió un error al iniciar sesión.";
+
+                if (status === 404) {
+                // Usuario no encontrado
+                setPopup({
+                    title: "Usuario no encontrado",
+                    message,
+                });
+                } else if (status === 401) {
+                setPopup({
+                    title: "Credenciales inválidas",
+                    message: "Correo o contraseña incorrectos.",
+                });
+                } else {
+                setPopup({
+                    title: "Error del servidor",
+                    message: "Intenta de nuevo más tarde.",
+                });
+                }
+            } else {
+                setPopup({
+                title: "Error de conexión",
+                message: "No se pudo conectar con el servidor.",
+                });
+            }
         }
     };
 
@@ -98,6 +150,13 @@ const Login: React.FC = () => {
                         ¿No tienes cuenta? <a href="#">Regístrate aquí.</a>
                     </div>
                 </div>
+                {popup && (
+                    <Popup
+                    title={popup.title}
+                    message={popup.message}
+                    onClose={() => setPopup(null)}
+                    />
+                )}
             </div>
     )
 };
