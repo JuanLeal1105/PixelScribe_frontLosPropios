@@ -7,7 +7,7 @@ import axios from "axios";
 
 // Componente Principal de la Aplicación
 const Login: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [email, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [popup, setPopup] = useState<{ title: string; message: string } | null>(
@@ -17,62 +17,66 @@ const Login: React.FC = () => {
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
-         e.preventDefault();
-
+        e.preventDefault();
+    
         try {
             const response = await axios.post("http://localhost:8081/api/auth/login", {
-                username,
+                email,
                 password,
-              });
+            });
+    
             console.log("Response completo:", response.data);
-
-            // Validar estructura de respuesta
-            if (
-                !response.data.data ||
-                !response.data.data.token ||
-                !response.data.data.role
-            ) {
-                console.error("Estructura de respuesta inválida:", response.data);
+    
+            // ✅ Validar estructura de respuesta del backend actual
+            if (!response.data || !response.data.userId || !response.data.email) {
+                console.error("Respuesta inválida del servidor:", response.data);
                 setPopup({
                     title: "Error de respuesta del servidor",
-                    message: "La respuesta del servidor no tiene el formato esperado.",
+                    message: "No se recibió la información esperada del usuario.",
                 });
                 return;
             }
-
-            sessionStorage.setItem("token", response.data.data.token);
+    
+            // ✅ Guardar usuario en sessionStorage
+            sessionStorage.setItem("user", JSON.stringify(response.data));
+    
+            // 🔹 Token simulado (para que el frontend no bloquee el acceso)
+            sessionStorage.setItem("token", "fake-jwt-token-dev");
+    
+            // ✅ Redirigir al dashboard (o donde necesites)
+            navigate("/dashboard");
+    
         } catch (error: any) {
             if (axios.isAxiosError(error) && error.response) {
                 const status = error.response.status;
                 const message =
-                error.response.data?.message || "Ocurrió un error al iniciar sesión.";
-
+                    error.response.data?.message || "Ocurrió un error al iniciar sesión.";
+    
                 if (status === 404) {
-                // Usuario no encontrado
-                setPopup({
-                    title: "Usuario no encontrado",
-                    message,
-                });
+                    setPopup({
+                        title: "Usuario no encontrado",
+                        message,
+                    });
                 } else if (status === 401) {
-                setPopup({
-                    title: "Credenciales inválidas",
-                    message: "Correo o contraseña incorrectos.",
-                });
+                    setPopup({
+                        title: "Credenciales inválidas",
+                        message: "Correo o contraseña incorrectos.",
+                    });
                 } else {
-                setPopup({
-                    title: "Error del servidor",
-                    message: "Intenta de nuevo más tarde.",
-                });
+                    setPopup({
+                        title: "Error del servidor",
+                        message: "Intenta de nuevo más tarde.",
+                    });
                 }
             } else {
                 setPopup({
-                title: "Error de conexión",
-                message: "No se pudo conectar con el servidor.",
+                    title: "Error de conexión",
+                    message: "No se pudo conectar con el servidor.",
                 });
             }
         }
     };
-
+    
     return (
             <div className="login-container">
                 {/* ------------------- PANEL IZQUIERDO: FORMULARIO DE LOGIN ------------------- */}
@@ -99,7 +103,7 @@ const Login: React.FC = () => {
                                 type="text"
                                 className="input-field"
                                 placeholder="Ingresa tu Email por favor"
-                                value={username}
+                                value={email}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
