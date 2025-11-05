@@ -1,0 +1,285 @@
+/* Fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+    --color-bg-dark: #1A0F44;
+    --color-bg-light: #261663;
+    --color-primary-pink: #d946ef; /* Magenta */
+    --color-primary-cyan: #06b6d4; /* Cyan */
+    --color-text-light: #f3f4f6;
+    --color-text-muted: #9ca3af;
+    --border-radius-lg: 1.5rem;
+    --font-family: 'Inter', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-dark);
+    font-family: var(--font-family);
+    color: var(--color-text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* AJUSTE CLAVE: Ocupar el 100% del Viewport para una experiencia Full-Screen */
+.login-container {
+    display: flex;
+    width: 100vw; /* Ancho completo */
+    height: 100vh; /* Alto completo */
+    max-width: none; /* Eliminar límite de ancho */
+    max-height: none; /* Eliminar límite de altura */
+    background-color: var(--color-bg-light);
+    border-radius: 0; /* Eliminar bordes redondeados */
+    box-shadow: none; /* Eliminar sombra */
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* ------------------ PANEL IZQUIERDO: FORMULARIO ------------------ */
+.login-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 3.5rem;
+    min-width: 350px;
+    background: rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.logo-top { /* Estilo para posicionar el logo en la esquina superior */
+    position: absolute;
+    top: 2.5rem;
+    left: 3.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    z-index: 10;
+}
+/* Ajuste de posición en móvil */
+@media (max-width: 950px) {
+    .logo-top {
+        left: 2rem;
+    }
+}
+
+.logo-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--color-primary-cyan);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    background: linear-gradient(45deg, var(--color-primary-cyan), var(--color-primary-pink));
+}
+
+/* El formulario ahora toma el espacio disponible y se centra */
+.auth-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrado vertical */
+    align-items: center;
+    gap: 1.5rem;
+    z-index: 10;
+    padding-top: 1rem;
+}
+
+.profile-icon-placeholder {
+    width: 6rem;
+    height: 6rem;
+    border: 2px solid var(--color-primary-cyan);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-primary-cyan);
+    margin-bottom: 1rem;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.input-group svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: var(--color-text-light);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-field:focus {
+    border-color: var(--color-primary-pink);
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+}
+
+.login-button {
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    background: linear-gradient(90deg, var(--color-primary-pink), var(--color-primary-cyan));
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.3s, transform 0.1s;
+    box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);
+}
+
+.login-button:hover {
+    opacity: 0.9;
+}
+
+.login-button:active {
+    transform: scale(0.99);
+}
+
+.utility-links {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+    font-size: 0.75rem;
+    margin-top: 1rem;
+}
+
+.utility-links a, .utility-links label {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.utility-links a:hover {
+    color: var(--color-primary-cyan);
+}
+
+/* ------------------ PANEL DERECHO: VISUAL/BIENVENIDA ------------------ */
+.visual-panel {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem;
+    position: relative;
+    background-color: var(--color-bg-dark);
+    overflow: hidden;
+    min-width: 400px;
+}
+
+.visual-panel h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--color-text-light);
+    line-height: 1;
+    margin-bottom: 1rem;
+    z-index: 5;
+}
+
+.welcome-text p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    max-width: 400px;
+    margin-bottom: 2rem;
+    z-index: 5;
+}
+
+.signup-link {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    z-index: 5;
+}
+
+.signup-link a {
+    color: var(--color-primary-cyan);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.signup-link a:hover {
+    color: var(--color-primary-pink);
+}
+
+/* Efecto de Onda de Neón (Abstract Background) */
+.neon-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.8;
+    background: radial-gradient(circle at 70% 30%, rgba(217, 70, 239, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 30% 70%, rgba(6, 182, 212, 0.3) 0%, transparent 40%);
+    animation: moveWave 20s infinite alternate ease-in-out;
+    filter: blur(100px);
+}
+
+@keyframes moveWave {
+    0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1) translate(50px, -50px);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.8;
+    }
+}
+
+/* ------------------ RESPONSIVE DESIGN ------------------ */
+
+/* Tablets y Móviles (el panel visual se oculta) */
+@media (max-width: 950px) {
+    .login-container {
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: none;
+        flex-direction: column;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .login-panel {
+        min-width: auto;
+        padding: 2rem;
+        flex: 1;
+        /* El formulario se centra automáticamente gracias a flex-grow y justify-content: center */
+        justify-content: center; /* Cambiado a center para un mejor look en móvil */
+    }
+    
+    .visual-panel {
+        display: none; /* Ocultar el panel visual en pantallas pequeñas */
+    }
+}
